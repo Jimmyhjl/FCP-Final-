@@ -133,84 +133,111 @@ This section contains code for the Ising Model - task 1 in the assignment
 ==============================================================================================================
 '''
 
-def calculate_agreement(population, row, col, external=0.0):
-	'''
-	This function should return the *change* in agreement that would result if the cell at (row, col) was to flip it's value
-	Inputs: population (numpy array)
-			row (int)
-			col (int)
-			external (float)
-	Returns:
-			change_in_agreement (float)
-	'''
+def create_array(rows=100, columns=100, probability=0.5):
+    """
+    Function to create a numpy array with specified number of rows and columns,
+    initialized with values -1 and 1 according to the given probability.
 
-	#Your code for task 1 goes here
+    Args:
+    - rows (int): Number of rows in the array. Default is 100.
+    - columns (int): Number of columns in the array. Default is 100.
+    - probability (float): Probability of getting value 1. Default is 0.5.
 
-	return np.random * population
+    Returns:
+    - array (numpy.ndarray): Numpy array of shape (rows, columns) with values -1 and 1.
+    """
+    array = np.random.choice([-1, 1], size=(rows, columns), p=[1 - probability, probability])
+    return array
+
+def calculate_agreement(population, row, col, external=0):
+    """
+    Function to calculate the agreement for a specific cell in an Ising model.
+
+    Args:
+    - population (numpy.ndarray): 2D numpy array representing the Ising model.
+    - row (int): Row index of the cell.
+    - col (int): Column index of the cell.
+    - external (float): External influence on the cell's agreement. Default is 0.
+
+    Returns:
+    - Di (float): Agreement value for the cell at (row, col).
+    """
+    center = population[row, col]
+    left_neighbor = population[row, col - 1]
+    right_neighbor = population[row, (col + 1) % population.shape[1]]
+    upper_neighbor = population[row - 1, col]
+    bottom_neighbor = population[(row + 1) % population.shape[0], col]
+
+    PO = (left_neighbor + right_neighbor + upper_neighbor + bottom_neighbor + external) * center
+    return PO
+
 
 def ising_step(population, external=0.0):
-	'''
-	This function will perform a single update of the Ising model
-	Inputs: population (numpy array)
-			external (float) - optional - the magnitude of any external "pull" on opinion
-	'''
-	
-	n_rows, n_cols = population.shape
-	row = np.random.randint(0, n_rows)
-	col  = np.random.randint(0, n_cols)
+    '''
+    This function will perform a single update of the Ising model
+    Inputs: population (numpy array)
+            external (float) - optional - the magnitude of any external "pull" on opinion
+    '''
 
-	agreement = calculate_agreement(population, row, col, external=0.0)
+    n_rows, n_cols = population.shape
+    row = np.random.randint(0, n_rows)
+    col = np.random.randint(0, n_cols)
 
-	if agreement < 0:
-		population[row, col] *= -1
+    agreement = calculate_agreement(population, row, col, external=0.0)
 
-	#Your code for task 1 goes here
+    if agreement < 0:
+        population[row, col] *= -1
+
+
+# Your code for task 1 goes here
 
 def plot_ising(im, population):
-	'''
-	This function will display a plot of the Ising model
-	'''
+    '''
+    This function will display a plot of the Ising model
+    '''
+
 
     new_im = np.array([[255 if val == -1 else 1 for val in rows] for rows in population], dtype=np.int8)
     im.set_data(new_im)
     plt.pause(0.1)
 
+
 def test_ising():
-	'''
-	This function will test the calculate_agreement function in the Ising model
-	'''
+    '''
+    This function will test the calculate_agreement function in the Ising model
+    '''
 
-    print("Testing ising model calculations")
-    population = -np.ones((3, 3))
-    assert(calculate_agreement(population,1,1)==4), "Test 1"
 
-    population[1, 1] = 1.
-    assert(calculate_agreement(population,1,1)==-4), "Test 2"
+print("Testing ising model calculations")
+population = -np.ones((3, 3))
+assert (calculate_agreement(population, 1, 1) == 4), "Test 1"
 
-    population[0, 1] = 1.
-    assert(calculate_agreement(population,1,1)==-2), "Test 3"
+population[1, 1] = 1.
+assert (calculate_agreement(population, 1, 1) == -4), "Test 2"
 
-    population[1, 0] = 1.
-    assert(calculate_agreement(population,1,1)==0), "Test 4"
+population[0, 1] = 1.
+assert (calculate_agreement(population, 1, 1) == -2), "Test 3"
 
-    population[2, 1] = 1.
-    assert(calculate_agreement(population,1,1)==2), "Test 5"
+population[1, 0] = 1.
+assert (calculate_agreement(population, 1, 1) == 0), "Test 4"
 
-    population[1, 2] = 1.
-    assert(calculate_agreement(population,1,1)==4), "Test 6"
+population[2, 1] = 1.
+assert (calculate_agreement(population, 1, 1) == 2), "Test 5"
 
-    "Testing external pull"
-    population = -np.ones((3, 3))
-    assert(calculate_agreement(population,1,1,1)==3), "Test 7"
-    assert(calculate_agreement(population,1,1,-1)==5), "Test 8"
-    assert(calculate_agreement(population,1,1,10)==-6), "Test 9"
-    assert(calculate_agreement(population,1,1,-10)==14), "Test 10"
+population[1, 2] = 1.
+assert (calculate_agreement(population, 1, 1) == 4), "Test 6"
 
-    print("Tests passed")
+"Testing external pull"
+population = -np.ones((3, 3))
+assert (calculate_agreement(population, 1, 1, 1) == 3), "Test 7"
+assert (calculate_agreement(population, 1, 1, -1) == 5), "Test 8"
+assert (calculate_agreement(population, 1, 1, 10) == -6), "Test 9"
+assert (calculate_agreement(population, 1, 1, -10) == 14), "Test 10"
+
+print("Tests passed")
 
 
 def ising_main(population, alpha=None, external=0.0):
-    
     fig = plt.figure()
     ax = fig.add_subplot(111)
     ax.set_axis_off()
