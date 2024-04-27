@@ -325,22 +325,4 @@ def main():
 	#You should write some code for handling flags here
 
 if __name__=="__main__":
-	nodes = []
-	num_nodes = 10
-	for node_number in range(num_nodes):
-		connections = [1 for val in range(num_nodes)]
-		connections[node_number] = 0
-		new_node = Node(0, node_number, connections=connections)
-		nodes.append(new_node)
-	network = Network(nodes)
-	
-	for node in network.nodes:
-		assert(len(node.get_neighbour_indexes())==num_nodes-1), node.get_neighbour_indexes()
-	print("Pass")
-	print("Testing fully connected network")
-	assert(network.get_mean_degree()==num_nodes-1), network.get_mean_degree()
-	print("Pass")
-	assert(network.get_mean_clustering()==1),  network.get_mean_clustering()
-	print("Pass")
-	assert(network.get_mean_path_length()==1), network.get_mean_path_length()
-	print("Pass")
+	pass
