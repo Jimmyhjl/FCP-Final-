@@ -108,10 +108,10 @@ def main():
     parser = argparse.ArgumentParser(description="Produce and visualize small-world networks.")
 
     # Define command line arguments for number of nodes
-    parser.add_argument('-n', '--nodes', default=10, type=int)
+    parser.add_argument('-nodes', default=10, type=int)
 
     # Define command line arguments for the probability re-wiring
-    parser.add_argument('-p', '--probability', default=0.2, type=float)
+    parser.add_argument('-re_wire', default=0.2, type=float)
     args = parser.parse_args()
 
     # Make a Network object to generate small-world networks
@@ -122,7 +122,7 @@ def main():
     network.plot()
 
     # Generate and plot a small-world network with the specified number of nodes and re-wiring probability
-    network.make_small_world_network(args.nodes, args.probability)
+    network.make_small_world_network(args.nodes, args.re_wire)
     network.plot()
 
 
