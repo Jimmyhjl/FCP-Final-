@@ -119,12 +119,42 @@ class Network:
 					self.nodes[neighbour_index].connections[index] = 1
 
 	def make_ring_network(self, N, neighbour_range=1):
-		pass
-		#Your code  for task 4 goes here
+	    neighbouring = np.zeros((N, N), dtype=int)
+            for i in range(0, N):
+
+                # Set connections to left and right neighbours
+                for j in range(1, neighbour_range + 1):
+
+                    # Set the connection to the left neighbouring node
+                    neighbouring[i, (i - j) % N] = 1
+
+                    # Set the connection to the right neighbouring node
+                    neighbouring[i, (i + j) % N] = 1
+
+            # Create nodes with random values and connections
+            self.nodes = [Node(np.random.rand(), i, neighbouring[i]) for i in range(N)]
 
 	def make_small_world_network(self, N, re_wire_prob=0.2):
-		pass
-		#Your code for task 4 goes here
+	    n = len(self.nodes)
+            for i in range(0, n):
+                for j in range(i + 1, n):
+                    if self.nodes[i].connections[j] == 1:
+                        if np.random.rand() < re_wire_prob:
+                            connected_nodes = np.where(self.nodes[i].connections == 1)[0]
+                            possible_nodes = np.setdiff1d(np.arange(n), connected_nodes)
+                            possible_nodes = possible_nodes[possible_nodes != i]
+
+                            if len(possible_nodes) > 0:
+                                # Select a random node from the possible nodes
+                                new_node = np.random.choice(possible_nodes)
+
+                                # Break the original connection
+                                self.nodes[i].connections[j] = 0
+                                self.nodes[j].connections[i] = 0
+
+                                # Establish a new connection
+                                self.nodes[i].connections[new_node] = 1
+                                self.nodes[new_node].connections[i] = 1
 
 	def plot(self):
 
@@ -346,8 +376,26 @@ This section contains code for the main function- you should write some code for
 '''
 
 def main():
-    pass
-	#You should write some code for handling flags here
+    # Create argument parser
+    parser = argparse.ArgumentParser(description="Produce and visualize small-world networks.")
 
+    # Define command line arguments for number of nodes
+    parser.add_argument('-nodes', default=10, type=int)
+
+    # Define command line arguments for the probability re-wiring
+    parser.add_argument('-re_wire', default=0.2, type=float)
+    args = parser.parse_args()
+
+    # Make a Network object to generate small-world networks
+    network = Network()
+
+    # Generate and plot a ring network with the specified number of nodes
+    network.make_ring_network(args.nodes)
+    network.plot()
+
+    # Generate and plot a small-world network with the specified number of nodes and re-wiring probability
+    network.make_small_world_network(args.nodes, args.re_wire)
+    network.plot()
+	
 if __name__=="__main__":
 	main()
