@@ -69,6 +69,8 @@ class Network:
 			neighbour_indexes = node.get_neighbour_indexes()
 			number_of_neighbours = len(neighbour_indexes)
 			maximum_clustering = number_of_neighbours*(number_of_neighbours-1)/2
+			if maximum_clustering == 0:
+				continue
 
 			checked_edges = []
 			x = 0 # track how many neighbours are connected to eachother
@@ -199,8 +201,8 @@ def test_networks():
 
 	print("Testing ring network")
 	assert(network.get_mean_degree()==2), network.get_mean_degree()
-	assert(network.get_clustering()==0), network.get_clustering()
-	assert(network.get_path_length()==2.777777777777778), network.get_path_length()
+	assert(network.get_mean_clustering()==0), network.get_mean_clustering()
+	assert(network.get_mean_path_length()==2.777777777777778), network.get_mean_path_length()
 
 	nodes = []
 	num_nodes = 10
@@ -213,8 +215,8 @@ def test_networks():
 
 	print("Testing one-sided network")
 	assert(network.get_mean_degree()==1), network.get_mean_degree()
-	assert(network.get_clustering()==0),  network.get_clustering()
-	assert(network.get_path_length()==5), network.get_path_length()
+	assert(network.get_mean_clustering()==0),  network.get_mean_clustering()
+	assert(network.get_mean_path_length()==5), network.get_mean_path_length()
 
 	nodes = []
 	num_nodes = 10
@@ -227,8 +229,8 @@ def test_networks():
 
 	print("Testing fully connected network")
 	assert(network.get_mean_degree()==num_nodes-1), network.get_mean_degree()
-	assert(network.get_clustering()==1),  network.get_clustering()
-	assert(network.get_path_length()==1), network.get_path_length()
+	assert(network.get_mean_clustering()==1),  network.get_mean_clustering()
+	assert(network.get_mean_path_length()==1), network.get_mean_path_length()
 
 	print("All tests passed")
 
@@ -399,4 +401,4 @@ def main():
     network.plot()
 	
 if __name__=="__main__":
-	main()
+	test_networks()
