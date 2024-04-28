@@ -138,14 +138,14 @@ class Network:
 		self.nodes = [Node(np.random.rand(), i, neighbouring[i]) for i in range(N)]
 
 	def make_small_world_network(self, N, re_wire_prob=0.2):
-		n = len(self.nodes)
-		for i in range(0, n):
-			for j in range(i + 1, n):
+		self.make_ring_network(N)
+		for i in range(0, N):
+			for j in range(i + 1, N):
 				if self.nodes[i].connections[j] == 1:
 					if np.random.rand() < re_wire_prob:
-						connected_nodes = np.where(self.nodes[i].connections == 1)[0]
-						possible_nodes = np.setdiff1d(np.arange(n), connected_nodes)
-						possible_nodes = possible_nodes[possible_nodes != i]
+						connected_nodes = np.where(self.nodes[i].connections == 1)[0] # find indexes of neighbours
+						possible_nodes = np.setdiff1d(np.arange(N), connected_nodes) # exclude neighbours from the list of possible nodes to connect to
+						possible_nodes = possible_nodes[possible_nodes != i] # prevent reconnecting to itself
 
 						if len(possible_nodes) > 0:
 							# Select a random node from the possible nodes
@@ -175,7 +175,7 @@ class Network:
 			node_x = network_radius * np.cos(node_angle)
 			node_y = network_radius * np.sin(node_angle)
 
-			circle = plt.Circle((node_x, node_y), 0.3*num_nodes, color=cm.hot(node.value))
+			circle = plt.Circle((node_x, node_y), 0.3*num_nodes, color=cm.hot(node.value/2))
 			ax.add_patch(circle)
 
 			for neighbour_index in range(i+1, num_nodes):
@@ -187,7 +187,6 @@ class Network:
 					ax.plot((node_x, neighbour_x), (node_y, neighbour_y), color='black')
 
 def test_networks():
-
 	#Ring network
 	nodes = []
 	num_nodes = 10
@@ -383,7 +382,7 @@ def main():
 	parser.add_argument('-nodes', default=10, type=int)
 
 	# Define command line arguments for the probability re-wiring
-	parser.add_argument('-re_wire', default=0.2, type=float)
+	parser.add_argument('-re_wire', default=0.98, type=float)
 	args = parser.parse_args()
 
 	# Make a Network object to generate small-world networks
@@ -394,9 +393,10 @@ def main():
 	network.plot()
 	plt.show()
 
+	small_world_network  = Network()
 	# Generate and plot a small-world network with the specified number of nodes and re-wiring probability
-	network.make_small_world_network(args.nodes, args.re_wire)
-	network.plot()
+	small_world_network.make_small_world_network(args.nodes, args.re_wire)
+	small_world_network.plot()
 	plt.show()
 	
 if __name__=="__main__":
