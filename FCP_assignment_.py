@@ -379,26 +379,28 @@ This section contains code for the main function- you should write some code for
 '''
 
 def main():
-    # Create argument parser
-    parser = argparse.ArgumentParser(description="Produce and visualize small-world networks.")
+	# Create argument parser
+	parser = argparse.ArgumentParser(description="Produce and visualize small-world networks.")
 
-    # Define command line arguments for number of nodes
-    parser.add_argument('-nodes', default=10, type=int)
+	# Define command line arguments for number of nodes
+	parser.add_argument('-nodes', default=10, type=int)
 
-    # Define command line arguments for the probability re-wiring
-    parser.add_argument('-re_wire', default=0.2, type=float)
-    args = parser.parse_args()
+	# Define command line arguments for the probability re-wiring
+	parser.add_argument('-re_wire', default=0.2, type=float)
+	args = parser.parse_args()
 
-    # Make a Network object to generate small-world networks
-    network = Network()
+	# Make a Network object to generate small-world networks
+	network = Network()
 
-    # Generate and plot a ring network with the specified number of nodes
-    network.make_ring_network(args.nodes)
-    network.plot()
+	# Generate and plot a ring network with the specified number of nodes
+	network.make_ring_network(args.nodes)
+	network.plot()
+	plt.show()
 
-    # Generate and plot a small-world network with the specified number of nodes and re-wiring probability
-    network.make_small_world_network(args.nodes, args.re_wire)
-    network.plot()
+	# Generate and plot a small-world network with the specified number of nodes and re-wiring probability
+	network.make_small_world_network(args.nodes, args.re_wire)
+	network.plot()
+	plt.show()
 	
 if __name__=="__main__":
-	test_networks()
+	main()
