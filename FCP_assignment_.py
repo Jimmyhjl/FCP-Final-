@@ -121,7 +121,7 @@ class Network:
 					node.connections[neighbour_index] = 1
 					self.nodes[neighbour_index].connections[index] = 1
 
-	def make_ring_network(self, N, neighbour_range=1):
+	def make_ring_network(self, N, neighbour_range=2):
 		neighbouring = np.zeros((N, N), dtype=int)
 		for i in range(0, N):
 
