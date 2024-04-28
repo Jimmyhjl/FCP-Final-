@@ -120,42 +120,42 @@ class Network:
 					self.nodes[neighbour_index].connections[index] = 1
 
 	def make_ring_network(self, N, neighbour_range=1):
-	    neighbouring = np.zeros((N, N), dtype=int)
-            for i in range(0, N):
+		neighbouring = np.zeros((N, N), dtype=int)
+		for i in range(0, N):
 
-                # Set connections to left and right neighbours
-                for j in range(1, neighbour_range + 1):
+			# Set connections to left and right neighbours
+			for j in range(1, neighbour_range + 1):
 
-                    # Set the connection to the left neighbouring node
-                    neighbouring[i, (i - j) % N] = 1
+				# Set the connection to the left neighbouring node
+				neighbouring[i, (i - j) % N] = 1
 
-                    # Set the connection to the right neighbouring node
-                    neighbouring[i, (i + j) % N] = 1
+				# Set the connection to the right neighbouring node
+				neighbouring[i, (i + j) % N] = 1
 
-            # Create nodes with random values and connections
-            self.nodes = [Node(np.random.rand(), i, neighbouring[i]) for i in range(N)]
+		# Create nodes with random values and connections
+		self.nodes = [Node(np.random.rand(), i, neighbouring[i]) for i in range(N)]
 
 	def make_small_world_network(self, N, re_wire_prob=0.2):
-	    n = len(self.nodes)
-            for i in range(0, n):
-                for j in range(i + 1, n):
-                    if self.nodes[i].connections[j] == 1:
-                        if np.random.rand() < re_wire_prob:
-                            connected_nodes = np.where(self.nodes[i].connections == 1)[0]
-                            possible_nodes = np.setdiff1d(np.arange(n), connected_nodes)
-                            possible_nodes = possible_nodes[possible_nodes != i]
+		n = len(self.nodes)
+		for i in range(0, n):
+			for j in range(i + 1, n):
+				if self.nodes[i].connections[j] == 1:
+					if np.random.rand() < re_wire_prob:
+						connected_nodes = np.where(self.nodes[i].connections == 1)[0]
+						possible_nodes = np.setdiff1d(np.arange(n), connected_nodes)
+						possible_nodes = possible_nodes[possible_nodes != i]
 
-                            if len(possible_nodes) > 0:
-                                # Select a random node from the possible nodes
-                                new_node = np.random.choice(possible_nodes)
+						if len(possible_nodes) > 0:
+							# Select a random node from the possible nodes
+							new_node = np.random.choice(possible_nodes)
 
-                                # Break the original connection
-                                self.nodes[i].connections[j] = 0
-                                self.nodes[j].connections[i] = 0
+							# Break the original connection
+							self.nodes[i].connections[j] = 0
+							self.nodes[j].connections[i] = 0
 
-                                # Establish a new connection
-                                self.nodes[i].connections[new_node] = 1
-                                self.nodes[new_node].connections[i] = 1
+							# Establish a new connection
+							self.nodes[i].connections[new_node] = 1
+							self.nodes[new_node].connections[i] = 1
 
 	def plot(self):
 
