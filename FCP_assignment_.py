@@ -296,14 +296,11 @@ def ising_step(population, external=0.0):
         population[row, col] *= -1
 
 
-# Your code for task 1 goes here
 
 def plot_ising(im, population):
     '''
     This function will display a plot of the Ising model
     '''
-
-
     new_im = np.array([[255 if val == -1 else 1 for val in rows] for rows in population], dtype=np.int8)
     im.set_data(new_im)
     plt.pause(0.1)
