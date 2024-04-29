@@ -278,10 +278,11 @@ def calculate_agreement(population, row, col, external=0):
     return PO
 
 
-def ising_step(population, external=0.0):
+def ising_step(population, alpha, external=0.0):
     '''
     This function will perform a single update of the Ising model
     Inputs: population (numpy array)
+            alpha (float) - tolerance parameter
             external (float) - optional - the magnitude of any external "pull" on opinion
     '''
 
@@ -289,10 +290,14 @@ def ising_step(population, external=0.0):
     row = np.random.randint(0, n_rows)
     col = np.random.randint(0, n_cols)
 
-    agreement = calculate_agreement(population, row, col, external=0.0)
+    agreement = calculate_agreement(population, row, col, external)
 
     if agreement < 0:
         population[row, col] *= -1
+    else:
+        probability_of_flip = np.exp(-agreement / alpha)
+        if np.random.rand() < probability_of_flip:
+            population[row, col] *= -1
 
 
 
