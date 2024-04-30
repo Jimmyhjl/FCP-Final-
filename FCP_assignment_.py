@@ -388,7 +388,6 @@ def defuant_iter(opinions, beta=0.2, threshold=0.2):
 		opinions[i] += beta * (opinions[j] - opinions[i])
 		opinions[j] += beta * (opinions[i] - opinions[j])
 	return opinions
-
 def test_defuant(opinions, beta=0.2, threshold=0.2):
 	fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 6))
 	plt.suptitle(f"Coupling: {beta}, Threshold: {threshold}", fontsize=16)
@@ -454,13 +453,6 @@ def main():
 if __name__=="__main__":
 	main()
 
-def defuant_main():
-    pass
-	#Your code for task 2 goes here
-
-def test_defuant():
-    pass
-	#Your code for task 2 goes here
 
 
 '''
