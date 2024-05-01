@@ -37,7 +37,7 @@ class Network:
 	Mean clustering co-efficient, the clustering coefficient measures the fraction of a nodes neighbours that connect to eachother. 
 	number of possible connections for n neighbors is S = n*(n-1)/2. then find x (number of connections between neighbors) and then find x/S
 	'''
-	def DFS(self, root_node:Node): # returns the best route to reach every node from the root node
+	def BFS(self, root_node:Node): # returns the best route to reach every node from the root node
 		visited = [root_node] # track which nodes have already been visited
 		queue = [root_node] # list of unvisited nodes to visit (remove from front, to act as a queue)
 		routes = {root_node: []} # dictionary of each node, and a list of the least amount of nodes to reach them
@@ -94,7 +94,7 @@ class Network:
 		average_length_sum = 0
 		for node in self.nodes:
 			length_sum = 0
-			routes = self.DFS(node)
+			routes = self.BFS(node)
 			for key in routes.keys():
 				if key == node: # dont count the route to itself in the calculation
 					continue
