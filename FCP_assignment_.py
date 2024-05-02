@@ -2,8 +2,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 import argparse
-import copy
-from collections import deque
 
 class Node:
 
@@ -367,13 +365,7 @@ def ising_main(population, alpha=None, external=0.0):
 This section contains code for the Defuant Model - task 2 in the assignment
 ==============================================================================================================
 '''
-import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib.cm as cm
-import math 
-import argparse
-import copy
-from collections import deque
+
 
 def defuant_main(opinions, beta=0.2, threshold=0.2):
 	epoch = 100
