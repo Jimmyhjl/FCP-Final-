@@ -1,4 +1,4 @@
-#Task 1
+###Task 1
 
 Creating the Ising Model (create_array Function):
 Generates a numpy array representing the Ising model with specified dimensions.
