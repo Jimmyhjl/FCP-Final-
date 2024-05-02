@@ -457,7 +457,6 @@ def get_args():
 	## for ising
 	parser.add_argument('-external', default=0, type=float)
 	parser.add_argument('-alpha', default=1, type=float)
-	parser.add_argument('-H', default=0, type=float)
 
 	## for defuant
 	parser.add_argument('-beta', default=0.2, type=float)
@@ -471,7 +470,7 @@ def main():
  
 	if args.ising_model:
 		print("ising model")
-		print(f"external = {args.external} alpha = {args.alpha} H = {args.H}")
+		print(f"external = {args.external} alpha = {args.alpha}")
 		population = create_array()
 		ising_main(population, args.alpha, args.external)
 			
