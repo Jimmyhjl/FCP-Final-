@@ -1,7 +1,7 @@
 # Execution
 The code is operated using CLI flags when upon execution.
 
-List of arguments + function
+**List of arguments + function**
 - -ising_model
   - -external
   - -alpha
