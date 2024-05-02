@@ -1,3 +1,23 @@
+# Execution
+The code is operated using CLI flags when upon execution.
+
+List of arguments + function
+- -ising_model
+  - -external
+  - -alpha
+  - -H
+- -test_ising
+
+- -defuant
+  - -beta
+  - -threshold
+- -test_defuant
+
+- -test_networks
+- -ring_network
+- -small_world
+  - -re_wire
+
 # Task 1
 
 Creating the Ising Model (create_array Function):
