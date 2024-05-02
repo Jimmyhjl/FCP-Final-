@@ -23,6 +23,7 @@ Testing:
 Includes a testing function (test_ising) to verify the correctness of agreement calculations under different scenarios. 
 
 Task 4
+install matplotlib and numpy
 Clone the repository or download the small_world_network.py file.
 Navigate to the directory containing small_world_network.py.
 Run the script using Python:
