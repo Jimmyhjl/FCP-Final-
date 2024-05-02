@@ -1,7 +1,7 @@
 # Execution
 The code is operated using CLI flags when upon execution.
 
-**List of arguments + function**
+**List of arguments and their purpose**
 - -ising_model
   - -external
   - -alpha
@@ -17,6 +17,9 @@ The code is operated using CLI flags when upon execution.
 - -ring_network | takes an integer value for the number of nodes
 - -small_world | takes an integer value for the number of nodes
   - -re_wire | optionally specifiy the rewire probability (float) default is 0.2
+
+**Example usage:**
+python3 .\FCP_assignment_.py -ising_model -external 0.1 -alpha 0.5
 
 # Task 1
 
