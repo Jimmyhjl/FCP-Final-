@@ -6,14 +6,14 @@ The code is operated using CLI flags when upon execution.
   - -external
   - -alpha
   - -H
-- -test_ising
+- -test_ising | executes the test_ising function to validate the code
 
 - -defuant
   - -beta
   - -threshold
-- -test_defuant
+- -test_defuant | executes the test_defuant function to validate the code
 
-- -test_networks | takes an integer value for the number of nodes
+- -test_networks | executes the test_networks function to validate the code
 - -ring_network | takes an integer value for the number of nodes
 - -small_world | takes an integer value for the number of nodes
   - -re_wire | optionally specifiy the rewire probability (float) default is 0.2
