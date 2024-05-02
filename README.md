@@ -13,10 +13,10 @@ List of arguments + function
   - -threshold
 - -test_defuant
 
-- -test_networks
-- -ring_network
-- -small_world
-  - -re_wire
+- -test_networks | takes an integer value for the number of nodes
+- -ring_network | takes an integer value for the number of nodes
+- -small_world | takes an integer value for the number of nodes
+  - -re_wire | optionally specifiy the rewire probability (float) default is 0.2
 
 # Task 1
 
