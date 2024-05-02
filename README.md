@@ -7,7 +7,6 @@ The code is operated using CLI flags when upon execution.
 * -ising_model
   * -external
   * -alpha
-  * -H
 * -test_ising | executes the test_ising function to validate the code
 * -defuant
   * -beta
