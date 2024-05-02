@@ -97,7 +97,8 @@ class Network:
 				if key == node: # dont count the route to itself in the calculation
 					continue
 				length_sum += len(routes[key])
-			average_length_sum += length_sum/(len(routes.keys())-1)
+			if length_sum != 0:
+				average_length_sum += length_sum/(len(routes.keys())-1)
 		return average_length_sum/len(self.nodes)
 				
 
@@ -493,9 +494,16 @@ def main():
 		print(f"random network n = {args.network}")
 		network = Network()
 		network.make_random_network(args.network, args.connection_probability)
+		print(f"Mean degree: {network.get_mean_degree()}")
+		print(f"Average path length: {network.get_mean_path_length()}")
+		print(f"Clustering co-efficient: {network.get_mean_clustering()}")
 		network.plot()
 		plt.show()
-		
+  
+	if args.test_networks:
+		print("testing networks")
+		test_networks()
+
 	if args.ring_network:
 		print(f"ring network n = {args.ring_network}")
 		network = Network()
