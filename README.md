@@ -15,6 +15,7 @@ The code is operated using CLI flags when upon execution.
 
 - -test_networks | executes the test_networks function to validate the code
 - -network | takes an integer value for the number of nodes to plot a random network
+  - connection_probability | optionally specify the chance a node will connect to a neighbour (float) default is 0.25
 - -ring_network | takes an integer value for the number of nodes
 - -small_world | takes an integer value for the number of nodes
   - -re_wire | optionally specifiy the rewire probability (float) default is 0.2
