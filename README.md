@@ -22,6 +22,18 @@ Parameters such as lattice size, initial spin probability, tolerance (alpha), an
 Testing:
 Includes a testing function (test_ising) to verify the correctness of agreement calculations under different scenarios. 
 
+Task 2
+-defuant: Run the Deffuant model simulation.
+-beta: Specify the beta parameter for the Deffuant model (default: 0.2).
+-threshold: Specify the threshold parameter for the Deffuant model (default: 0.2).
+-test_defuant: Run tests for the Deffuant model.
+-use_network: Use network structure for the simulation.
+
+Task 3
+
+
+
+
 Task 4
 install matplotlib and numpy
 Clone the repository or download the small_world_network.py file.
