@@ -23,6 +23,7 @@ Testing:
 Includes a testing function (test_ising) to verify the correctness of agreement calculations under different scenarios. 
 
 Task 2
+
 -defuant: Run the Deffuant model simulation.
 -beta: Specify the beta parameter for the Deffuant model (default: 0.2).
 -threshold: Specify the threshold parameter for the Deffuant model (default: 0.2).
@@ -35,6 +36,7 @@ Task 3
 
 
 Task 4
+
 install matplotlib and numpy
 Clone the repository or download the small_world_network.py file.
 Navigate to the directory containing small_world_network.py.
