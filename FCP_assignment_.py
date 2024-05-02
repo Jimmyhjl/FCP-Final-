@@ -346,18 +346,20 @@ def test_ising():
 
 
 def ising_main(population, alpha=None, external=0.0):
-    fig = plt.figure()
-    ax = fig.add_subplot(111)
-    ax.set_axis_off()
-    im = ax.imshow(population, interpolation='none', cmap='RdPu_r')
+	fig = plt.figure()
+	plt.suptitle(f"External: {external}, alpha: {alpha}", fontsize=16)
+	ax = fig.add_subplot(111)
+	ax.set_axis_off()
+	im = ax.imshow(population, interpolation='none', cmap='RdPu_r')
 
-    # Iterating an update 100 times
-    for frame in range(100):
-        # Iterating single steps 1000 times to form an update
-        for step in range(1000):
-            ising_step(population, external)
-        print('Step:', frame, end='\r')
-        plot_ising(im, population)
+	# Iterating an update 100 times
+	for frame in range(100):
+
+		# Iterating single steps 1000 times to form an update
+		for _ in range(1000):
+			ising_step(population, external)
+		print('Step:', frame, end='\r')
+		plot_ising(im, population)
 
 
 '''
@@ -376,8 +378,8 @@ from collections import deque
 def defuant_main(opinions, beta=0.2, threshold=0.2):
 	epoch = 100
 	each_epoch_iters = 1000
-	for frame in range(epoch):
-		for step in range(each_epoch_iters):
+	for _ in range(epoch):
+		for _ in range(each_epoch_iters):
 			opinions = defuant_iter(opinions, beta, threshold)
 	return opinions
 
@@ -388,6 +390,7 @@ def defuant_iter(opinions, beta=0.2, threshold=0.2):
 		opinions[i] += beta * (opinions[j] - opinions[i])
 		opinions[j] += beta * (opinions[i] - opinions[j])
 	return opinions
+
 def test_defuant(opinions, beta=0.2, threshold=0.2):
 	fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 6))
 	plt.suptitle(f"Coupling: {beta}, Threshold: {threshold}", fontsize=16)
@@ -430,61 +433,82 @@ def test_defuant(opinions, beta=0.2, threshold=0.2):
 	plt.show()
 	return opinions
 
-
-def get_parser():
-	parser = argparse.ArgumentParser(description='The Test')
-	parser.add_argument('-defuant', action='store_true')
-	parser.add_argument('-beta', type=float, default=0.2)
-	parser.add_argument('-threshold', type=float, default=0.2)
-	parser.add_argument('-test_defuant', action='store_true')
-	args = parser.parse_args()
-	return args
-
-def main():
-	args = get_parser()
-	if args.defuant:
-		opinions = np.random.rand(100)
-		opinions = defuant_main(opinions, args.beta, args.threshold)
-
-	if args.test_defuant:
-		opinions = np.random.rand(100)
-		test_defuant(opinions, args.beta, args.threshold)
-
-if __name__=="__main__":
-	main()
-
-
-
 '''
 ==============================================================================================================
 This section contains code for the main function- you should write some code for handling flags here
 ==============================================================================================================
 '''
 
-def main():
-	# Create argument parser
-	parser = argparse.ArgumentParser(description="Produce and visualize small-world networks.")
+def get_args():
+    
+	parser = argparse.ArgumentParser(description="Produce and visualize social connections.")
 
-	# Define command line arguments for number of nodes
-	parser.add_argument('-nodes', default=10, type=int)
+	# Optional Arguments
+	parser.add_argument('-ising_model', action='store_true')
+	parser.add_argument('-test_ising', action='store_true')
 
-	# Define command line arguments for the probability re-wiring
-	parser.add_argument('-re_wire', default=0.98, type=float)
+	parser.add_argument('-defuant', action='store_true')
+	parser.add_argument('-test_defuant', action='store_true')
+
+	parser.add_argument('-test_networks', action='store_true')
+
+	# Optional positional arguments
+
+	## for networks
+	parser.add_argument('-ring_network', type=int)
+	parser.add_argument('-small_world', type=int)
+	parser.add_argument('-re_wire', default=0.2, type=int)
+
+	## for ising
+	parser.add_argument('-external', default=0, type=float)
+	parser.add_argument('-alpha', default=1, type=float)
+	parser.add_argument('-H', default=0, type=float)
+
+	## for defuant
+	parser.add_argument('-beta', default=0.2, type=float)
+	parser.add_argument('-threshold', default=0.2, type=float)
+
 	args = parser.parse_args()
+	return args
 
-	# Make a Network object to generate small-world networks
-	network = Network()
+def main():
+	args = get_args()
+ 
+	if args.ising_model:
+		print("ising model")
+		print(f"external = {args.external} alpha = {args.alpha} H = {args.H}")
+		population = create_array()
+		ising_main(population, args.alpha, args.external)
+			
+	if args.test_ising:
+		print("testing ising model")
+		test_ising()
 
-	# Generate and plot a ring network with the specified number of nodes
-	network.make_ring_network(args.nodes)
-	network.plot()
-	plt.show()
+	if args.defuant:
+		print("defuant model")
+		print(f"beta = {args.beta} threshold = {args.threshold}")
+		opinions = np.random.rand(100)
+		opinions = defuant_main(opinions, args.beta, args.threshold)
+		
+	if args.test_defuant:
+		print("testing defuant model")
+		opinions = np.random.rand(100)
+		test_defuant(opinions, args.beta, args.threshold)
+		
+	if args.ring_network:
+		print(f"ring network n = {args.ring_network}")
+		network = Network()
+		network.make_ring_network(args.ring_network)
+		network.plot()
+		plt.show()
 
-	small_world_network  = Network()
-	# Generate and plot a small-world network with the specified number of nodes and re-wiring probability
-	small_world_network.make_small_world_network(args.nodes, args.re_wire)
-	small_world_network.plot()
-	plt.show()
-	
-if __name__=="__main__":
-	main()
+	if args.small_world:
+		print(f"small world n = {args.small_world} re_wire = {args.re_wire}")
+		network = Network()
+		network.make_small_world_network(args.small_world, args.re_wire)
+		network.plot()
+		plt.show()
+
+
+if __name__ == "__main__":
+    main()
