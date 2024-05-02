@@ -14,6 +14,7 @@ The code is operated using CLI flags when upon execution.
 - -test_defuant | executes the test_defuant function to validate the code
 
 - -test_networks | executes the test_networks function to validate the code
+- -network | takes an integer value for the number of nodes to plot a random network
 - -ring_network | takes an integer value for the number of nodes
 - -small_world | takes an integer value for the number of nodes
   - -re_wire | optionally specifiy the rewire probability (float) default is 0.2
@@ -56,8 +57,11 @@ Includes a testing function (test_ising) to verify the correctness of agreement 
 
 ## Task 3
 
-Functions which were not specified for the task were added to the code
+Functions which were not specified for the task were added to the code.
+- get_neighbour_indexes() defined in the Node class, returns the network's indices for every neighbour of a node
+- BFS(root_node) defined in the Network class, peforms a Breadth-first-search to find the shortest route to every other node in the network from the root_node
 
+test 
 
 ## Task 4
 
