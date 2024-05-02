@@ -20,20 +20,17 @@ Each update consists of multiple steps, adjusting the spins according to the rul
 Customization:
 Parameters such as lattice size, initial spin probability, tolerance (alpha), and external influence can be adjusted to customize the simulation.
 Testing:
-Includes a testing function (test_ising) to verify the correctness of agreement calculations under different scenarios. 
+Includes a testing function (test_ising) to verify the correctness of agreement calculations under different scenarios.
 
 Task 2
 
--defuant: Run the Deffuant model simulation.
--beta: Specify the beta parameter for the Deffuant model (default: 0.2).
--threshold: Specify the threshold parameter for the Deffuant model (default: 0.2).
--test_defuant: Run tests for the Deffuant model.
--use_network: Use network structure for the simulation.
+\-defuant: Run the Deffuant model simulation.
+\-beta: Specify the beta parameter for the Deffuant model (default: 0.2).
+\-threshold: Specify the threshold parameter for the Deffuant model (default: 0.2).
+\-test_defuant: Run tests for the Deffuant model.
+\-use_network: Use network structure for the simulation.
 
 Task 3
-
-
-
 
 Task 4
 
@@ -41,7 +38,7 @@ install matplotlib and numpy
 Clone the repository or download the small_world_network.py file.
 Navigate to the directory containing small_world_network.py.
 Run the script using Python:
-python small_world_network.py [-h] [-nodes NODES] [-re_wire RE_WIRE]
+python small_world_network.py \[-h\] \[-nodes NODES\] \[-re_wire RE_WIRE\]
 Optional arguments:
--nodes NODES: Number of nodes in the network (default: 10).
--re_wire RE_WIRE: Probability of re-wiring edges in the small-world network (default: 0.98).
+\-nodes NODES: Number of nodes in the network (default: 10).
+\-re_wire RE_WIRE: Probability of re-wiring edges in the small-world network (default: 0.98).

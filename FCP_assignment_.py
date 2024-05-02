@@ -101,7 +101,7 @@ class Network:
 		return average_length_sum/len(self.nodes)
 				
 
-	def make_random_network(self, N, connection_probability):
+	def make_random_network(self, N, connection_probability=0.25):
 		'''
 		This function makes a *random* network of size N.
 		Each node is connected to each other node with probability p
@@ -447,9 +447,11 @@ def get_args():
 	# Optional positional arguments
 
 	## for networks
+	parser.add_argument('-network', type=int)
+	parser.add_argument('-connection_probability', type=float, default=0.25)
 	parser.add_argument('-ring_network', type=int)
 	parser.add_argument('-small_world', type=int)
-	parser.add_argument('-re_wire', default=0.2, type=int)
+	parser.add_argument('-re_wire', default=0.2, type=float)
 
 	## for ising
 	parser.add_argument('-external', default=0, type=float)
@@ -486,6 +488,13 @@ def main():
 		print("testing defuant model")
 		opinions = np.random.rand(100)
 		test_defuant(opinions, args.beta, args.threshold)
+  
+	if args.network:
+		print(f"random network n = {args.network}")
+		network = Network()
+		network.make_random_network(args.network, args.connection_probability)
+		network.plot()
+		plt.show()
 		
 	if args.ring_network:
 		print(f"ring network n = {args.ring_network}")
