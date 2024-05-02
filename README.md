@@ -63,7 +63,8 @@ Functions which were not specified for the task were added to the code.
 - BFS(root_node) defined in the Network class, peforms a Breadth-first-search to find the shortest route to every other node in the network from the root_node
 
 test the validitiy of the code by executing
-python3 .\FCP_assignment_.py 
+python3 .\FCP_assignment_.py -network 10
+python3 .\FCP_assignment_.py -test_networks
 
 ## Task 4
 
