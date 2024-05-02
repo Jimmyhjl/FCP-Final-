@@ -62,7 +62,8 @@ Functions which were not specified for the task were added to the code.
 - get_neighbour_indexes() defined in the Node class, returns the network's indices for every neighbour of a node
 - BFS(root_node) defined in the Network class, peforms a Breadth-first-search to find the shortest route to every other node in the network from the root_node
 
-test 
+test the validitiy of the code by executing
+python3 .\FCP_assignment_.py 
 
 ## Task 4
 
