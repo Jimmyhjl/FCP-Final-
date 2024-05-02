@@ -21,3 +21,12 @@ Customization:
 Parameters such as lattice size, initial spin probability, tolerance (alpha), and external influence can be adjusted to customize the simulation.
 Testing:
 Includes a testing function (test_ising) to verify the correctness of agreement calculations under different scenarios. 
+
+Task 4
+Clone the repository or download the small_world_network.py file.
+Navigate to the directory containing small_world_network.py.
+Run the script using Python:
+python small_world_network.py [-h] [-nodes NODES] [-re_wire RE_WIRE]
+Optional arguments:
+-nodes NODES: Number of nodes in the network (default: 10).
+-re_wire RE_WIRE: Probability of re-wiring edges in the small-world network (default: 0.98).
