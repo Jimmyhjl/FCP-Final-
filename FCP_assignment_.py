@@ -160,11 +160,12 @@ class Network:
 							self.nodes[i].connections[new_node] = 1
 							self.nodes[new_node].connections[i] = 1
 
-	def plot(self):
+	def plot(self, ax=None):
 
-		fig = plt.figure()
-		ax = fig.add_subplot(111)
-		ax.set_axis_off()
+		if ax is None:
+			fig = plt.figure()
+			ax = fig.add_subplot(111)
+			ax.set_axis_off()
 
 		num_nodes = len(self.nodes)
 		network_radius = num_nodes * 10
@@ -176,7 +177,7 @@ class Network:
 			node_x = network_radius * np.cos(node_angle)
 			node_y = network_radius * np.sin(node_angle)
 
-			circle = plt.Circle((node_x, node_y), 0.3*num_nodes, color=cm.hot(node.value/2))
+			circle = plt.Circle((node_x, node_y), 0.3*num_nodes, color=cm.hot(node.value))
 			ax.add_patch(circle)
 
 			for neighbour_index in range(i+1, num_nodes):
@@ -186,6 +187,7 @@ class Network:
 					neighbour_y = network_radius * np.sin(neighbour_angle)
 
 					ax.plot((node_x, neighbour_x), (node_y, neighbour_y), color='black')
+		return ax
 
 def test_networks():
 	#Ring network
@@ -256,51 +258,92 @@ def create_array(rows=100, columns=100, probability=0.5):
     array = np.random.choice([-1, 1], size=(rows, columns), p=[1 - probability, probability])
     return array
 
-def calculate_agreement(population, row, col, external=0):
-    """
-    Function to calculate the agreement for a specific cell in an Ising model.
+def calculate_agreement(population, row=None, col=None, external=0, node:Node=None):
+	"""
+	Function to calculate the agreement for a specific cell in an Ising model.
 
-    Args:
-    - population (numpy.ndarray): 2D numpy array representing the Ising model.
-    - row (int): Row index of the cell.
-    - col (int): Column index of the cell.
-    - external (float): External influence on the cell's agreement. Default is 0.
+	Args:
+	- population (numpy.ndarray): 2D numpy array representing the Ising model.
+	- row (int): Row index of the cell.
+	- col (int): Column index of the cell.
+	- external (float): External influence on the cell's agreement. Default is 0.
 
-    Returns:
-    - Di (float): Agreement value for the cell at (row, col).
-    """
-    center = population[row, col]
-    left_neighbor = population[row, col - 1]
-    right_neighbor = population[row, (col + 1) % population.shape[1]]
-    upper_neighbor = population[row - 1, col]
-    bottom_neighbor = population[(row + 1) % population.shape[0], col]
+	Returns:
+	- Di (float): Agreement value for the cell at (row, col).
+	"""
+	agreement = 0
+	if node:
+		neighbour_indexes = node.get_neighbour_indexes()
+		for i in neighbour_indexes:
+			agreement += node.value * population.nodes[i].value
+		agreement += node.value * external
+	else:
+		center = population[row, col]
+		left_neighbor = population[row, col - 1]
+		right_neighbor = population[row, (col + 1) % population.shape[1]]
+		upper_neighbor = population[row - 1, col]
+		bottom_neighbor = population[(row + 1) % population.shape[0], col]
 
-    PO = (left_neighbor + right_neighbor + upper_neighbor + bottom_neighbor + external) * center
-    return PO
-
-
-def ising_step(population, alpha, external=0.0):
-    '''
-    This function will perform a single update of the Ising model
-    Inputs: population (numpy array)
-            alpha (float) - tolerance parameter
-            external (float) - optional - the magnitude of any external "pull" on opinion
-    '''
-
-    n_rows, n_cols = population.shape
-    row = np.random.randint(0, n_rows)
-    col = np.random.randint(0, n_cols)
-
-    agreement = calculate_agreement(population, row, col, external)
-
-    if agreement < 0:
-        population[row, col] *= -1
-    else:
-        probability_of_flip = np.exp(-agreement / alpha)
-        if np.random.rand() < probability_of_flip:
-            population[row, col] *= -1
+		agreement = (left_neighbor + right_neighbor + upper_neighbor + bottom_neighbor + external) * center
+	return agreement
 
 
+def ising_step(population, alpha=1.0, external=0.0):
+	'''
+	This function will perform a single update of the Ising model
+	Inputs: population (numpy array)
+			alpha (float) - tolerance parameter
+			external (float) - optional - the magnitude of any external "pull" on opinion
+	'''
+
+	node = None
+	row = None
+	col = None
+	if type(population) == Network: # use network if population provided is one
+		node = population.nodes[np.random.randint(0,len(population.nodes)-1)]
+	else: # otherwise use 2d array
+		n_rows, n_cols = population.shape
+		row = np.random.randint(0, n_rows)
+		col = np.random.randint(0, n_cols)
+
+	agreement = calculate_agreement(population, row, col, external, node)
+
+	if agreement < 0:
+		if type(population) == Network:
+			node.value *= -1
+		else:
+			population[row, col] *= -1
+	else:
+		probability_of_flip = np.exp(-agreement / alpha)
+		if np.random.rand() < probability_of_flip:
+			if type(population) == Network:
+				node.value *= -1
+			else:
+				population[row, col] *= -1
+
+def ising_main(population, alpha=1.0, external=0.0):
+	fig = plt.figure()
+	plt.suptitle(f"External: {external}, alpha: {alpha}", fontsize=16)
+	ax = fig.add_subplot(111)
+	ax.set_axis_off()
+	
+	if type(population) == Network:
+		population.plot(ax)
+	else:
+		im = ax.imshow(population, interpolation='none', cmap='RdPu_r')
+
+	# Iterating an update 100 times
+	for frame in range(100):
+
+		# Iterating single steps 1000 times to form an update
+		for _ in range(1000):
+			ising_step(population, alpha, external)
+		print('Step:', frame, end='\r')
+		if type(population) == Network:
+			population.plot(ax)
+			plt.pause(0.1)
+		else:
+			plot_ising(im, population)
 
 def plot_ising(im, population):
     '''
@@ -309,7 +352,6 @@ def plot_ising(im, population):
     new_im = np.array([[255 if val == -1 else 1 for val in rows] for rows in population], dtype=np.int8)
     im.set_data(new_im)
     plt.pause(0.1)
-
 
 def test_ising():
 	'''
@@ -342,24 +384,6 @@ def test_ising():
 	assert (calculate_agreement(population, 1, 1, -10) == 14), "Test 10"
 
 	print("Tests passed")
-
-
-def ising_main(population, alpha=None, external=0.0):
-	fig = plt.figure()
-	plt.suptitle(f"External: {external}, alpha: {alpha}", fontsize=16)
-	ax = fig.add_subplot(111)
-	ax.set_axis_off()
-	im = ax.imshow(population, interpolation='none', cmap='RdPu_r')
-
-	# Iterating an update 100 times
-	for frame in range(100):
-
-		# Iterating single steps 1000 times to form an update
-		for _ in range(1000):
-			ising_step(population, external)
-		print('Step:', frame, end='\r')
-		plot_ising(im, population)
-
 
 '''
 ==============================================================================================================
@@ -456,7 +480,8 @@ def get_args():
 
 	## for ising
 	parser.add_argument('-external', default=0, type=float)
-	parser.add_argument('-alpha', default=1, type=float)
+	parser.add_argument('-alpha', default=1.0, type=float)
+	parser.add_argument('-use_network', type=int)
 
 	## for defuant
 	parser.add_argument('-beta', default=0.2, type=float)
@@ -471,25 +496,30 @@ def main():
 	if args.ising_model:
 		print("ising model")
 		print(f"external = {args.external} alpha = {args.alpha}")
-		population = create_array()
+		population = None
+		if args.use_network:
+			population = Network()
+			population.make_small_world_network(args.use_network, args.re_wire)
+		else:
+			population = create_array()
 		ising_main(population, args.alpha, args.external)
 			
-	if args.test_ising:
+	elif args.test_ising:
 		print("testing ising model")
 		test_ising()
 
-	if args.defuant:
+	elif args.defuant:
 		print("defuant model")
 		print(f"beta = {args.beta} threshold = {args.threshold}")
 		opinions = np.random.rand(100)
 		opinions = defuant_main(opinions, args.beta, args.threshold)
 		
-	if args.test_defuant:
+	elif args.test_defuant:
 		print("testing defuant model")
 		opinions = np.random.rand(100)
 		test_defuant(opinions, args.beta, args.threshold)
   
-	if args.network:
+	elif args.network:
 		print(f"random network n = {args.network}")
 		network = Network()
 		network.make_random_network(args.network, args.connection_probability)
@@ -499,18 +529,18 @@ def main():
 		network.plot()
 		plt.show()
   
-	if args.test_networks:
+	elif args.test_networks:
 		print("testing networks")
 		test_networks()
 
-	if args.ring_network:
+	elif args.ring_network:
 		print(f"ring network n = {args.ring_network}")
 		network = Network()
 		network.make_ring_network(args.ring_network)
 		network.plot()
 		plt.show()
 
-	if args.small_world:
+	elif args.small_world:
 		print(f"small world n = {args.small_world} re_wire = {args.re_wire}")
 		network = Network()
 		network.make_small_world_network(args.small_world, args.re_wire)
