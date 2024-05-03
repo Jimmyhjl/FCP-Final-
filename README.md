@@ -7,6 +7,7 @@ The code is operated using CLI flags when upon execution.
 * -ising_model
   * -external
   * -alpha
+  * -network | operates the Ising model on a small world network of size N (Integer defined after the flag)
 * -test_ising | executes the test_ising function to validate the code
 * -defuant
   * -beta
@@ -61,9 +62,9 @@ Includes a testing function (test_ising) to verify the correctness of agreement 
 Functions which were not specified for the task were added to the code.
 
 * get_neighbour_indexes() defined in the Node class, returns the network's indices for every neighbour of a node
-* BFS(root_node) defined in the Network class, peforms a Breadth-first-search to find the shortest route to every other node in the network from the root_node
+* BFS(root_node) defined in the Network class, performs a Breadth-first-search to find the shortest route to every other node in the network from the root_node
 
-test the validitiy of the code by executing
+test the validity of the code by executing
 python3 .\\FCP_assignment_.py -network 10
 python3 .\\FCP_assignment_.py -test_networks
 
@@ -73,7 +74,18 @@ install matplotlib and numpy
 Clone the repository or download the small_world_network.py file.
 Navigate to the directory containing small_world_network.py.
 Run the script using Python:
+
 python small_world_network.py \[-h\] \[-nodes NODES\] \[-re_wire RE_WIRE\]
 Optional arguments:
 \-nodes NODES: Number of nodes in the network (default: 10).
 \-re_wire RE_WIRE: Probability of re-wiring edges in the small-world network (default: 0.98).
+
+## Task 5
+Task 5 modified the Ising model.
+
+methods modified:
+Network.plot() # allowed an ax input to prevent multiple graph instances from being created during the iteration of the Ising model
+calculate_agreement() # allowed an input of a node object and created a new agreement calculation to handle it
+ising_step() # selecting random nodes from the network, and modifying the value in the network instead of a 2d list
+ising_main() # calling the plot function from the network instead of the plot_ising() method
+
